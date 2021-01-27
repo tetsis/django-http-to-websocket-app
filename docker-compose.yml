@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: bash -c "sleep 3 && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 httptowebsocket.asgi:application"
+    environment:
+      - DB=db
+      - CHANNEL=channel
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - channel
+  db:
+    image: postgres:9
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+  channel:
+    image: redis:5
