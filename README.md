@@ -1,11 +1,36 @@
 # Django Http to WebSocket App
 This is a simple web application using [Django Channels](https://channels.readthedocs.io/en/stable/) framework and sending WebSocket message from [Django](https://docs.djangoproject.com/) view.
-And this application uses database in consumber.
+And this application uses database access in consumer.
 
 # Flow
 ```
-```
+Client A                  Server                  Client B
+   |-- POST /join --------->|                        |
+   |                  Save client A                  |
+   |<------ Redirect to / --|                        |
+   |-- GET / -------------->|                        |
+   |                        |                        |
+   |== Connect WebSocket ==>|                        |
+   |== Get members ========>|                        |
+   |<======= Members list ==|                        |
+   |                        |                        |
+   |                        |<--------- POST /join --|
+   |                  Save client B                  |
+   |<====== Join client B ==|                        |
+   |                        |-- Redirect to / ------>|
+   |                        |<-------------- GET / --|
+   |                        |                        |
+   |                        |<== Connect WebSocket ==|
+   |                        |<======== Get members ==|
+   |                        |== Members list =======>|
+   |                        |                        |
+   |                        |<-------- POST /leave --|
+   |                  Delete client B                |
+   |<===== Leave client B ==|                        |
+   |                        |-- Redirect to /join -->|
 
+-->: HTTP, ==>: WebSocket
+```
 
 # Test run
 ```
